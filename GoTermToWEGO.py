@@ -11,11 +11,10 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE 
 # SOFTWARE.
 ##########################################################################################################################
-####THE INPUTS FOR THIS SCRIPT ARE A TXT FILE WITH THE GO TERMS COLUMN FROM TRINOTATE AND A NAME FOR THE OUTPUT FILE!!!
+####THE INPUTS FOR THIS SCRIPT ARE A TAB DELIMITED TRINOTATE REPORT  AND A NAME FOR THE OUTPUT FILE!!!
 
-#This program takes the GO Terms column from a Trinotate output and places it in a format that can be used by the WEGO web
-#server http://wego.genomics.org.cn  To place the GO Terms in a text file that can be used by this script simply run
-#an awk command to pull the column from the Trinotate output (e.g. awk -F "\t" '{print $12}' <TrinotateOutput.tab>).
+#This program takes the GO Terms column from a Trinotate report and places it in a format that can be used by the WEGO web
+#server http://wego.genomics.org.cn 
 
 from __future__ import division
 import re
@@ -33,7 +32,8 @@ regex = re.compile("GO:\d\d\d\d\d\d\d",re.MULTILINE)
 output=open(outputFile,"w")
 t=1
 for x in goTermsFile:
-    goTermsList=regex.findall(x)
+    columnList=x.split("\t")
+    goTermsList=regex.findall(columnList[11]) ##This is the column with GO terms. If for some reason your trinotate file is different, change
     preface="Sample" + str(t)
     if goTermsList !=[]:
         output.write(preface + "\t")
@@ -43,7 +43,7 @@ for x in goTermsFile:
         output.write("\n")    
     t=t+1        
 output.close()
-    
+
 
 
 
